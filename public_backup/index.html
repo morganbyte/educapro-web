@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>EducaPro - Acceso</title>
+    <link rel="stylesheet" href="login.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="form-container" id="login-form">
+        <h1>Bienvenido a EducaPro</h1>
+        <p class="subtitle">Ingresa los siguientes campos para iniciar sesión</p>
+
+        <form class="form">
+            <div class="input-group">
+                <input type="email" id="login-email" name="email" placeholder="Correo" required>
+            </div>
+
+            <div class="input-group">
+                <input type="password" id="login-password" name="password" placeholder="Contraseña" required>
+            </div>
+
+            <button type="submit" class="btn-primary">Ingresar</button>
+
+            <div class="divider">
+                <span>o</span>
+            </div>
+
+            <button type="button" class="btn-google">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"
+                    alt="Google" class="google-icon">
+                Continuar con Google
+            </button>
+
+            <p class="register-text">
+                ¿Aún no tienes cuenta? <a href="#" id="show-register">Crear una</a>
+            </p>
+        </form>
+    </div>
+
+    <div class="form-container hidden" id="register-form">
+        <h1>Crear cuenta en EducaPro</h1>
+        <p class="subtitle">Completa los siguientes campos para registrarte</p>
+
+        <form class="form">
+            <div class="input-group">
+                <input type="text" id="register-name" name="name" placeholder="Nombre completo" required>
+            </div>
+
+            <div class="input-group">
+                <input type="email" id="register-email" name="email" placeholder="Correo electrónico" required>
+            </div>
+
+            <div class="input-group">
+                <input type="password" id="register-password" name="password" placeholder="Contraseña" required>
+            </div>
+
+            <div class="input-group">
+                <input type="password" id="register-confirm" name="confirm-password" placeholder="Confirmar contraseña"
+                    required>
+            </div>
+
+            <button type="submit" class="btn-primary">Registrarse</button>
+
+            <div class="divider">
+                <span>o</span>
+            </div>
+
+            <button type="button" class="btn-google">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"
+                    alt="Google" class="google-icon">
+                Continuar con Google
+            </button>
+
+            <p class="register-text">
+                ¿Ya tienes cuenta? <a href="#" id="show-login">Iniciar sesión</a>
+            </p>
+        </form>
+    </div>
+    </div>
+
+    <script type="module" src="login.js"></script>
+</body>
+
+</html>

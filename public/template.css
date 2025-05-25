@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0 1rem;
+  background-color: #f9f9f9;
+  color: #222;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid #ddd;
+}
+
+h1 {
+  font-weight: 600;
+  font-size: 1.8rem;
+  margin: 0;
+  color: #222;
+}
+
+.btn-logout {
+  background-color: #ef4444;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-logout:hover {
+  background-color: #dc2626;
+}
+
+.templates-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem 0;
+}
+
+.template-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.2s ease;
+}
+
+.template-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 15px rgb(0 0 0 / 0.15);
+}
+
+.template-card h3 {
+  margin-top: 0;
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: #1e40af;
+  margin-bottom: 0.5rem;
+  word-break: break-word;
+}
+
+.template-card p {
+  margin: 0 0 1.25rem 0;
+  font-weight: 400;
+  color: #555;
+}
+
+.template-card button {
+  align-self: flex-start;
+  padding: 0.5rem 1rem;
+  background-color: #1e40af;
+  border: none;
+  color: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.template-card button:hover {
+  background-color: #1e3a8a;
+}
+
+@media (max-width: 400px) {
+  body {
+    padding: 0 0.75rem;
+  }
+}
