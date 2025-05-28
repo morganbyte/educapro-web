@@ -58,27 +58,34 @@ async function loadTemplate() {
     const data = docSnap.data();
     templateTitle.textContent = data.tema || 'Detalle de Plantilla';
 
-    if (data.tipoPlantilla === 'Exámenes') {
-      examData = typeof data.jsonRespuesta === 'string' ? JSON.parse(data.jsonRespuesta) : data.jsonRespuesta;
+    const tipo = data.tipoPlantilla;
+    const respuesta = typeof data.jsonRespuesta === 'string' ? JSON.parse(data.jsonRespuesta) : data.jsonRespuesta;
+
+    if (tipo === 'Exámenes') {
+      examData = respuesta;
       userAnswers = Array(examData.preguntas.length).fill(null);
       renderExam();
       showExamQuestion();
-    } else if (data.tipoPlantilla === 'Quizzes') {
-      quizData = typeof data.jsonRespuesta === 'string' ? JSON.parse(data.jsonRespuesta) : data.jsonRespuesta;
+    } else if (tipo === 'Quizzes') {
+      quizData = respuesta;
       userAnswers = Array(quizData.preguntas.length).fill(null);
       renderQuiz();
       showQuizQuestion();
-    } else if (data.tipoPlantilla === 'Talleres') {
-      workShopData = typeof data.jsonRespuesta === 'string' ? JSON.parse(data.jsonRespuesta) : data.jsonRespuesta;
+    } else if (tipo === 'Talleres') {
+      workShopData = respuesta;
       renderWorkshop();
+    } else if (tipo === 'Temario') {
+      renderSyllabusTemplate(respuesta); // ✅ Aquí se usa la nueva función
     } else {
       renderOtherTemplate(data);
     }
+
   } catch (error) {
     templateContent.innerHTML = '<p>Error al cargar la plantilla.</p>';
     console.error(error);
   }
 }
+
 
 // -------------------- EXAMENES --------------------
 
@@ -91,10 +98,10 @@ function renderExam() {
       <button id="btn-finish" style="display:none;">Finalizar</button>
     </div>
     <div id="result-container" style="display:none;">
-      <h2>Exámenes Completado</h2>
-      <p id="score-percentage"></p>
+       <h2 class="exam-title">Exámenes Completado</h2>
+      <p id="score-percentage" class="exam-score"></p>
       <div id="review-container"></div>
-      <button id="btn-retry">Reintentar</button>
+       <button id="btn-retry" class="retry-button">Reintentar</button>
     </div>
   `;
 
@@ -416,6 +423,80 @@ function renderWorkshop() {
     });
   });
 }
+
+function renderSyllabusTemplate(data) {
+  const periodos = Array.isArray(data.periodos) ? data.periodos : [];
+
+  let currentPeriodoIndex = 0;
+
+  function renderPeriodo(index) {
+    const periodo = periodos[index];
+    if (!periodo) return;
+
+    const temasHTML = periodo.temas_principales.map(tema => `<li>${tema}</li>`).join('');
+    const actividadesHTML = periodo.actividades_practicas.map(act => `
+      <li><strong>${act.titulo}:</strong> ${act.descripcion}</li>
+    `).join('');
+    const cronogramaHTML = periodo.cronograma.map(c => `
+      <tr>
+        <td>${c.semana}</td>
+        <td>${c.contenido}</td>
+        <td>${c.descripcion}</td>
+      </tr>
+    `).join('');
+
+    templateContent.innerHTML = `
+      <section class="temario-info">
+        <h2>${data.titulo || 'Temario'}</h2>
+        <p>${data.descripcion_general || ''}</p>
+
+        <div class="botones-periodo">
+          ${periodos.map((p, i) => `
+            <button class="btn-periodo ${i === index ? 'activo' : ''}" data-index="${i}">
+              ${p.nombre}
+            </button>
+          `).join('')}
+        </div>
+
+        <div class="contenido-periodo">
+          <h3>${periodo.nombre}</h3>
+          <p><strong>Duración:</strong> ${periodo.duracion}</p>
+          <p>${periodo.descripcion}</p>
+
+          <h4>Temas Principales</h4>
+          <ul>${temasHTML}</ul>
+
+          <h4>Actividades Prácticas</h4>
+          <ul>${actividadesHTML}</ul>
+
+          <h4>Cronograma</h4>
+          <table class="tabla-cronograma">
+            <thead>
+              <tr>
+                <th>Semana</th>
+                <th>Contenido</th>
+                <th>Descripción</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${cronogramaHTML}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    `;
+
+    document.querySelectorAll('.btn-periodo').forEach(btn => {
+      btn.addEventListener('click', e => {
+        const newIndex = parseInt(e.target.dataset.index);
+        renderPeriodo(newIndex);
+      });
+    });
+  }
+
+  renderPeriodo(currentPeriodoIndex);
+}
+
 
 // -------------------- OTROS --------------------
 

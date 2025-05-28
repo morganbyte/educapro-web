@@ -16,6 +16,13 @@
   </header>
 
   <main>
+    <div class="filters">
+      <input list="tipos-plantilla" id="filter-type" placeholder="Filtrar por tipo de plantilla" />
+      <datalist id="tipos-plantilla"></datalist>
+
+      <input type="text" id="filter-user" placeholder="Filtrar por nombre del docente" />
+    </div>
+
     <div id="templates-container" class="templates-container">
       <!-- Las plantillas se cargarán aquí -->
     </div>

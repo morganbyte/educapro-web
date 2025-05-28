@@ -19,6 +19,12 @@ const auth = getAuth(app);
 const templatesContainer = document.getElementById('templates-container');
 const logoutBtn = document.getElementById('btn-logout');
 
+const filterTypeInput = document.getElementById('filter-type');
+const filterUserInput = document.getElementById('filter-user');
+
+
+let allTemplates = [];
+
 async function getUserName(userId) {
   try {
     const userRef = doc(db, 'users', userId);
@@ -42,7 +48,6 @@ async function loadTemplates() {
 
     const templatesPromises = snapshot.docs.map(async docSnap => {
       const data = docSnap.data();
-      // Extraer userId del path (users/{userId}/plantillas/{templateId})
       const pathSegments = docSnap.ref.path.split('/');
       const userIdIndex = pathSegments.indexOf('users') + 1;
       const userId = pathSegments[userIdIndex];
@@ -56,12 +61,24 @@ async function loadTemplates() {
       };
     });
 
-    const templates = await Promise.all(templatesPromises);
-    showTemplates(templates);
+    allTemplates = await Promise.all(templatesPromises);
+    showTemplates(allTemplates);
+    fillTipoDatalist();  // Llenar datalist de tipos únicos para filtro
   } catch (error) {
     templatesContainer.innerHTML = '<p style="color:red;">Error al cargar las plantillas.</p>';
     console.error(error);
   }
+}
+
+function fillTipoDatalist() {
+  const tiposUnicos = [...new Set(allTemplates.map(t => t.tipoPlantilla).filter(Boolean))];
+  const datalist = document.getElementById('tipos-plantilla');
+  datalist.innerHTML = '';
+  tiposUnicos.forEach(tipo => {
+    const option = document.createElement('option');
+    option.value = tipo;
+    datalist.appendChild(option);
+  });
 }
 
 function showTemplates(templates) {
@@ -82,6 +99,23 @@ function showTemplates(templates) {
     templatesContainer.appendChild(div);
   });
 }
+
+function applyFilters() {
+  const typeFilter = filterTypeInput.value.trim().toLowerCase();
+  const userFilter = filterUserInput.value.trim().toLowerCase();
+
+  const filteredTemplates = allTemplates.filter(t => {
+    const typeMatches = !typeFilter || (t.tipoPlantilla?.toLowerCase().includes(typeFilter));
+    const userMatches = !userFilter || (t.ownerName?.toLowerCase().includes(userFilter));
+    return typeMatches && userMatches;
+  });
+
+  showTemplates(filteredTemplates);
+}
+
+// Filtros se aplican al escribir (input)
+filterTypeInput.addEventListener('input', applyFilters);
+filterUserInput.addEventListener('input', applyFilters);
 
 logoutBtn.addEventListener('click', async () => {
   await signOut(auth);
